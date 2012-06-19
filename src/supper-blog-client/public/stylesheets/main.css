@@ -1,0 +1,25 @@
+body {
+	position: relative;
+	padding-top: 90px;
+	background-color: #F9F9F9;	
+}
+.left-padding{
+	padding-left: 10px;
+}
+
+.border{
+	border: 1px solid black;
+}
+.profile-card-inner{
+	padding-left: 10px;
+	width: 49%;
+}
+.profile-card-inner h2{
+	white-space:normal;
+}
+.shift-left{
+	margin-left: 15px;
+}
+input, textarea{
+	margin-left: 15px;
+}

@@ -1,0 +1,74 @@
+@(uri: String, user:Option[com.minosiants.supperblog.common.model.UserProfile]=None, form:String="{}")
+@import views.html.templates._
+@import com.codahale.jerkson.Json._
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Supper Blog</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/lib/bootstrap.css")"> 
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/lib/bootstrap-responsive.css")"> 
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/lib/bootstrap-datepicker.css")"> 
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">      		      
+    </head>
+
+	<body data-spy="scroll" data-target=".subnav" data-offset="50">
+		<div id="main-navbar"></div> 
+	    <div class="container">    
+	    	<div class="content"  id="content">
+		    	<div class="row" >
+			    	<div class="span8">	    						
+		        		<div id="posts"></div>    				
+			    	</div>
+			    	<div class="span4">	
+			    		<div id="profile"></div>
+			    		<div id="calendar"></div>
+			    		<div id="tags"></div>
+			    	</div>
+		    	</div>    	    	
+	    	</div>    	
+	    </div>   		  	     
+	</body>
+	<script type="text/javascript">
+		app=window.app||{};
+		app.form=JSON.parse('@{Html(form)}');
+	</script>
+	<script src="@routes.Assets.at("javascripts/lib/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/lib/bootstrap.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/lib/underscore.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/lib/backbone.js")" type="text/javascript"></script>
+    <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>	
+    <script src="@routes.Assets.at("javascripts/app.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/util.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/models.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/collections.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/views.js")" type="text/javascript"></script>    
+    <script src="@routes.Assets.at("javascripts/routers.js")" type="text/javascript"></script>
+	@main_navbar(user)
+	@post(user)
+	@profile(user)
+	@tag()
+	@calendar()
+	<script type="text/javascript">
+		$(function(){		
+// 			 $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+// 				 options.xhrFields = {
+// 				          withCredentials: true
+// 				        };
+// 			      });
+
+$.ajaxSetup({   
+    xhrFields: {
+       withCredentials: true
+    },
+    crossDomain: true
+});
+			app.supperBlogRouter.navigate("@uri", {trigger: true});
+			if(app.posts.length==0 && @{(uri!="/signup"||uri!="/signin")}){
+				app.posts.fetch();
+				app.profile.fetch();
+				app.tags.fetch();
+			}
+		});
+	</script>	
+</html>

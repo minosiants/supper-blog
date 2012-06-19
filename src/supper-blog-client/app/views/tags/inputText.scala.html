@@ -1,0 +1,4 @@
+@(name:String,args: (Symbol,Any)*)
+@input(name,args.toMap){(name, value, htmlArgs)=>
+	<input type="text" value="@{Html(value)}" name="@name"  @toHtmlArgs(htmlArgs)></input>
+}

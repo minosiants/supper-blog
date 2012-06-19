@@ -1,0 +1,19 @@
+@(title:String)(body:Html)
+
+@_title=@{Html(title)}
+
+<div class="modal-header">
+	<% if(!options.embedded) {%>
+		<a class="close" data-dismiss="modal">x</a>
+	<%} %>	
+	<h3>@_title</h3>
+</div>
+<div class="modal-body">
+	@body			
+</div>
+<div class="modal-footer">
+	<% if(!options.embedded) {%>
+		<a href="#" class="btn btn-close">Close</a>
+	<%} %>	
+	<a href="#" class="btn btn-primary">@_title</a>
+</div>	

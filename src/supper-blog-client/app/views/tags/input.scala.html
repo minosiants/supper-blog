@@ -1,0 +1,18 @@
+@(name:String, args: Map[Symbol, Any])(inputDef:(String, String, Map[Symbol,Any])=>Html)
+
+@value = @{args.get('_value).map(_.toString).getOrElse("")}
+
+@cssClass= @{args.get('_class).map(_.toString).getOrElse("")}
+@helpBlock= @{args.get('_helpBlock).map(_.toString).getOrElse("")}
+
+@import com.minosiants.supperblog.util.TextUtil._
+@camelifyName=@{camelify(name)}
+@label	= @{args.get('_label).map(_.toString).getOrElse(name)}
+
+<div class="control-group clearfix @cssClass" id="@camelifyName">
+    <label for="@name">@label</label>
+    <div class="input">
+    	@{inputDef(camelifyName,value,args.filter(!_._1.name.startsWith("_")))}        
+        <span class="help-block shift-left">@Html(helpBlock)</span> 
+    </div>
+</div>

@@ -1,0 +1,4 @@
+@(name:String,args: (Symbol,Any)*)
+@input(name,args.toMap){(	name, value, htmlArgs)=>
+	<textarea name="@name" @toHtmlArgs(htmlArgs)>@value</textarea>
+}

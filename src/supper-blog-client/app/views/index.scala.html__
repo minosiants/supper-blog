@@ -1,0 +1,17 @@
+@(i:String, user:Option[com.minosiants.supperblog.common.model.UserProfile])
+
+@import helper.twitterBootstrap._
+
+@main("",user) {
+  <script type="text/javascript">
+		$(function(){
+						
+			app.posts.fetch();
+			app.profile.fetch();
+			app.tags.fetch();
+			
+			
+		});
+	</script>
+    
+}

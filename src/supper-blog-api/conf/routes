@@ -1,0 +1,28 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# Posts
+GET			/posts/:id					com.minosiants.supperblog.api.controllers.Posts.get(id:String)
+GET			/config/:key				com.minosiants.supperblog.api.controllers.Posts.config(key:String)
+GET			/posts						com.minosiants.supperblog.api.controllers.Posts.find
+GET			/posts?tags=:tags			com.minosiants.supperblog.api.controllers.Posts.filterByTags(tags:String)
+POST		/posts						com.minosiants.supperblog.api.controllers.Posts.create1
+PUT			/posts/:id					com.minosiants.supperblog.api.controllers.Posts.update(id:String)
+DELETE		/posts/:id					com.minosiants.supperblog.api.controllers.Posts.delete(id:String)
+OPTIONS		/posts						com.minosiants.supperblog.api.controllers.Posts.options2
+OPTIONS		/posts/:id					com.minosiants.supperblog.api.controllers.Posts.options(id:String)
+
+# Settings
+GET			/settings/profile			com.minosiants.supperblog.api.controllers.Settings.getProfile
+POST		/settings/profile			com.minosiants.supperblog.api.controllers.Settings.saveProfile
+
+#Tags
+GET			/tags						com.minosiants.supperblog.api.controllers.Tags.get
+
