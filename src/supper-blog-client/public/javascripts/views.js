@@ -1,6 +1,6 @@
 $(function(){
 	app=window.app||{}
-	
+	var Session=app.Session;
 	$.fn.bindInput = function( model ) {  
 	    return this.each(function() {
 	      var $this = $(this);
@@ -35,6 +35,10 @@ $(function(){
             if(this.model){
             	this.model.bind('change', this.render);
             }
+            var that=this;
+            Session.on('change:user',function(session){
+            	that.render();
+            });
             if(this.postInitialize){
             	this.postInitialize();
             }
@@ -91,16 +95,22 @@ $(function(){
 		templateName:'#change-password-modal-template'		
 	});
 	
-	var SignInModalView=BaseModalView.extend({
+	var SignInView=BaseModalView.extend({
 		templateName:'#sign-in-modal-template',
 		save:function(e){			
         	e.preventDefault();
         	this.clearErrors();
-        	$(this.el).find("input,textarea").bindInput(this.model);
-        	if(this.model.isValid()){
-        		$(this.el).find("form").attr("action",this.model.url).submit();
-        	}        	
+        	this.model.on('signedin',function(){        		
+        		window.location="http://supper-blog.com:9000/";
+        		
+        	});
+        	this.model.login($("form",this.el).serializeObject());
+        	
+        	
 		},
+		extraOptions:{
+			embedded:true
+		}
 			
 		
 	});
@@ -123,24 +133,46 @@ $(function(){
 			embedded:true
 		}
 	});
-	var SignInView=SignInModalView.extend({
-		extraOptions:{
-			embedded:true
-		}
-	});
 	
-	var MainNavbarView=BaseView.extend({
+	
+	var MainNavbarView=Backbone.View.extend({
+		
 		templateName:'#main-navbar-template',		
 		classNmae:'main-navbar',
+		
+		initialize: function() {
+            _.bindAll(this, 'render');
+            this.template=_.template($(this.templateName).html());            
+            var that=this;
+            Session.on('change:user',function(session){
+            	that.render();
+            });                    
+        },
+		
+        render: function() {
+        	var $el=$(this.el);
+        	$el.html(this.template());
+        	if(Session.getUser()){
+        		$("#userMenu",$el).show();
+        		$("#signinMenu",$el).hide()
+        	}else{
+        		$("#userMenu",$el).hide();
+        		$("#signinMenu",$el).show()
+        	}
+            return this;
+        },
+		
 		events: {
 			'click .new-post':  		'newPost',						
 			'click .edit-profile':  	'editProfile',
 			'click .change-password':  	'changePassword',
 			'click .sign-out':  		'signOut',
 			'click .sign-in':  			'signIn',
-			'click .sign-up':  			'signUp',
+			'click .sign-up':  			'signUp'
 	    },		
-        newPost:function(){
+        
+	    
+	    newPost:function(){
         	var post=new app.Post();
         	$(new CreatePostModalView({model:post}).render().el).modal();
         	post.on("sync",function(){
@@ -156,17 +188,18 @@ $(function(){
         	$(new ChangePasswordModalView({model:new app.Password()}).render().el).modal();
         },
 	    signOut:function(){
-	    	$.get("/signout").success(function(){
-	    		window.location.reload();
-	    	});
+	    	Session.logout();
 	    },
         signUp:function(e){
         	e.preventDefault();
-        	$(new SignUpModalView({model:new app.SignUp()}).render().el).modal();
+        	 
+        	//$(new SignUpModalView({model:new app.SignUp()}).render().el).modal();
         },
 	    signIn:function(e){
-	    	e.preventDefault();
-	    	$(new SignInModalView({model:new app.SignIn()}).render().el).modal();
+	    	//e.preventDefault();
+	    	///this.trigger('signin');
+	    	//$(new SignInModalView({model:new app.SignIn()}).render().el).modal();
+	    	//return false;
 	    }
 	});
 		
@@ -192,7 +225,7 @@ $(function(){
 	    },		
 	    selectPost:function(e){
 	    	e.preventDefault();
-	    	this.options.posts.selectPost(this.model);
+	    	this.options.posts.selectPost(this.model.id);
 	    }
 	    
 	});
@@ -207,11 +240,7 @@ $(function(){
 
         },
         
-        render: function() {
-        /*if(this.rendered){
-        		return this;
-        	}
-        	*/
+        render: function() {     
         	this.collection.each(this.renderPost);
         	this.rendered=true;
             return this;

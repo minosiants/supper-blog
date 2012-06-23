@@ -7,7 +7,7 @@ tmp
 dist
 src/supper-blog-client/project/project
 src/supper-blog-client/project/target
-src/supper-blog-client/.settings 
+src/supper-blog-client/.settings
 src/supper-blog-client/target
 src/supper-blog-client/tmp
 src/supper-blog-client/.history
@@ -21,7 +21,7 @@ src/supper-blog-client/.cache
 
 src/supper-blog-api/project/project
 src/supper-blog-api/project/target
-src/supper-blog-api/.settings 
+src/supper-blog-api/.settings
 src/supper-blog-api/target
 src/supper-blog-api/tmp
 src/supper-blog-api/.history
@@ -34,7 +34,7 @@ src/supper-blog-api/.cache
 
 src/supper-blog-common/project/project
 src/supper-blog-common/project/target
-src/supper-blog-common/.settings 
+src/supper-blog-common/.settings
 src/supper-blog-common/target
 src/supper-blog-common/tmp
 src/supper-blog-common/.history
