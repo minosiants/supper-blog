@@ -11,6 +11,7 @@ class UserServiceImplSpec extends SpecificationWithJUnit with Common{
 	 	
 	"get user profile" in{
 		val up=userService.getUserProfile("kaspar")
+		println(up)
 		up must not empty
 		
 	} 

@@ -6,10 +6,7 @@
 GET     	/posts/:id                com.minosiants.supperblog.controllers.Application.proxy(id)
 GET     	/			              com.minosiants.supperblog.controllers.Application.index
 GET     	/signup              com.minosiants.supperblog.controllers.Application.signUpView
-POST     	/signup              com.minosiants.supperblog.controllers.Application.signUp
 GET     	/signin              com.minosiants.supperblog.controllers.Application.signInView
-POST     	/signin              com.minosiants.supperblog.controllers.Application.signIn
-GET     	/signout             com.minosiants.supperblog.controllers.Application.signOut
 
 
 

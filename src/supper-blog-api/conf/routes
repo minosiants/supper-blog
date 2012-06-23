@@ -13,7 +13,7 @@ GET			/posts/:id					com.minosiants.supperblog.api.controllers.Posts.get(id:Stri
 GET			/config/:key				com.minosiants.supperblog.api.controllers.Posts.config(key:String)
 GET			/posts						com.minosiants.supperblog.api.controllers.Posts.find
 GET			/posts?tags=:tags			com.minosiants.supperblog.api.controllers.Posts.filterByTags(tags:String)
-POST		/posts						com.minosiants.supperblog.api.controllers.Posts.create1
+POST		/posts						com.minosiants.supperblog.api.controllers.Posts.create
 PUT			/posts/:id					com.minosiants.supperblog.api.controllers.Posts.update(id:String)
 DELETE		/posts/:id					com.minosiants.supperblog.api.controllers.Posts.delete(id:String)
 OPTIONS		/posts						com.minosiants.supperblog.api.controllers.Posts.options2
@@ -25,4 +25,10 @@ POST		/settings/profile			com.minosiants.supperblog.api.controllers.Settings.sav
 
 #Tags
 GET			/tags						com.minosiants.supperblog.api.controllers.Tags.get
+
+#Session
+POST		/session					com.minosiants.supperblog.api.controllers.Session.signIn
+OPTIONS		/session					com.minosiants.supperblog.api.controllers.Posts.options2
+GET			/session					com.minosiants.supperblog.api.controllers.Session.session
+DELETE		/session					com.minosiants.supperblog.api.controllers.Session.signOut
 

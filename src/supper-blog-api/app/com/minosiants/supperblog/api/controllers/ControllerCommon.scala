@@ -13,8 +13,6 @@ trait ControllerCommon extends Results{
 	  
 	}
 	
-	def withCors(result:PlainResult)={
-	  
-	  result.withHeaders(ACCESS_CONTROL:_*)
-	}
+	def withCors(result:PlainResult)=result.withHeaders(ACCESS_CONTROL:_*)
+	
 }

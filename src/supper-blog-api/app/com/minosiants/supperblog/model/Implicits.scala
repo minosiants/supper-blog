@@ -14,7 +14,7 @@ trait Implicits extends CommonImplicits{
 			author=dbo.getAs[BasicDBObject]("author").get,
 			title=dbo.getAsOrElse[String]("title",""),
 			content=dbo.getAsOrElse[String]("content",""),
-			tags=dbo.getAsOrElse[List[String]]("tags",Nil),
+			tags=dbo.as[BasicDBList]("tags").toList.asInstanceOf[List[String]],
 			created=dbo.getAs[Date]("created").get,
 			updated=dbo.getAs[Date]("updated").get)
   }
@@ -25,13 +25,13 @@ trait Implicits extends CommonImplicits{
 				  author=dbo.getAs[DBObject]("author").get,
 				  title=dbo.getAsOrElse[String]("title",""),
 				  content=dbo.getAsOrElse[String]("content",""),
-				  tags=dbo.getAsOrElse[List[String]]("tags",Nil),
+	  			  tags=dbo.as[BasicDBList]("tags").toList.asInstanceOf[List[String]],
 				  created=dbo.getAs[Date]("created").get,
 				  updated=dbo.getAs[Date]("updated").get)
   }
-  implicit def option_dbObject_to_option_post(dbo:Option[MongoDBObject] ):Option[Post]=dbo.asInstanceOf[Option[Post]]
+  implicit def option_dbObject_to_option_post(dbo:Option[MongoDBObject] ):Option[Post]=dbo.map{o=>mongoDBObject_to_post(o)}
   
-  implicit def list_dbObject_to_list_post(dbo:List[DBObject] ):List[Post]=dbo.map(_.asInstanceOf[Post])
+  implicit def list_dbObject_to_list_post(dbo:List[DBObject] ):List[Post]=dbo.map{o=>dbObject_to_post(o)}
   
   implicit def post_to_dbObject(p:Post):MongoDBObject={   
     

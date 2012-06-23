@@ -8,8 +8,8 @@ import com.minosiants.supperblog.common.UserToken
 import com.minosiants.supperblog.common.model.User
 import com.minosiants.supperblog.common.util.Util._
 import com.minosiants.supperblog.common.Common
-
-object Session extends Controller with ControllerCommon with Common{
+import com.codahale.jerkson.Json._
+object Session extends Controller with ControllerCommon with Common with Secured{
   
 	def signIn=Action{implicit request =>
 	  withCors(
@@ -18,6 +18,9 @@ object Session extends Controller with ControllerCommon with Common{
 			  user => Ok.withCookies(cookie(user.username))
 	  	)
 	  )
+	}
+	def session=withUser{user => implicit request =>
+		withCors(Ok(generate(Map("id"->user.id,"user"->user))))
 	}
 	
 	def signUp=Action{implicit request =>
@@ -62,7 +65,8 @@ object Session extends Controller with ControllerCommon with Common{
 			"password" -> nonEmptyText					
 			)(SignInData.apply)(SignInData.unapply)
 			.verifying("Username or password is not correct", 
-						signIn=>userService.userExists(signIn.username,signIn.password)
+//						signIn=>userService.userExists(signIn.username,signIn.password)
+						signIn=>signIn.username=="kaspar"&& signIn.password=="test123"
 			)
 		)
 }

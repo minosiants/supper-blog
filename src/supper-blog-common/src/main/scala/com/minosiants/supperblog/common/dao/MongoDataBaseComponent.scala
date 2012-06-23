@@ -43,16 +43,20 @@ class MongoDBRepository(colleaction:MongoCollection) extends Repository{
       None
     }
     def find(query:MongoDBObject,params:QueryParams)={
-      query+="created"->params.since
-      colleaction.find(query)
+      println("........")
+      colleaction.find(query ++ ("created" $lt params.since))
       	.limit(params.limit)
       	.sort(MongoDBObject(params.orederBy->params.order.id)).toList      		      
     }
     
     def find(params:QueryParams)={
-      colleaction.find(MongoDBObject("created"->params.since))
-      	.limit(params.limit)
-      	.sort(MongoDBObject(params.orederBy->params.order.id)).toList
+      val r=colleaction.find("created" $lt params.since)
+      	//.limit(params.limit)
+      	//.sort(MongoDBObject(params.orederBy->params.order.id))
+      .toList
+      println("........")
+      println(r)
+      r
     }
 
     def findOne(query:Map[String,Any]):Option[DBObject]={

@@ -1,21 +1,25 @@
 $(function(){
 	app=window.app||{};
 	var u=app.util;
+	var Session=app.Session;
 	var SupperBlogRouter=Backbone.Router.extend({
 		
 		routes: {
 			"":                 "home",  
 			"posts/:id":        "post",  			
 			"posts?:query":     "search",
-			"signup":     "signUp",
-			"signin":     "signIn"
+			"signup":     "signup",
+			"signin":     "signin"
 			
 		},
 		initialize:function(){
-			
+			 _.bindAll(this, 'signup', 'signin');
 			this.mainNavbarView= new app.MainNavbarView({
 				
 			});
+			
+			this.mainNavbarView.bind("signin",this.onSignin,this);
+			
 			this.profileView=new app.ProfileView({
 				model: app.profile
 			});
@@ -27,7 +31,8 @@ $(function(){
 				collection: app.callendarPosts
 			});
 			app.posts.bind("post:selected",this.onSelectedPost,this);
-			app.posts.bind("posts:result",this.onResult,this);
+			app.posts.bind("posts:result",this.onResult,this);			    
+			Session.getSession();	
 			
 		},
 		
@@ -65,19 +70,16 @@ $(function(){
 		onResult:function(){
 			Backbone.history.navigate(u.stripHost(app.posts.url));
 		},
-		signUp:function(){			
-			var model=new app.SignUp();
-			model.set(app.form.data||{});
-			$("#content").empty().append(new app.SignUpView({model:model}).render().el);
-			model.setErrors(app.form.errors);			
+		signup:function(){						
+			$("#content").empty().append(new app.SignUpView({model:new app.SignUp()}).render().el);
 			this.renderCommon();
 		},
-		signIn:function(){
-			var model=new app.SignIn();
-			model.set(app.form.data||{});
-			$("#content").empty().append(new app.SignInView({model: model}).render().el);
-			model.setErrors(app.form.errors);
-			this.renderCommon();
+		signin:function(){
+			$("#content").empty().append(new app.SignInView({model:  app.Session}).render().el);
+			this.renderCommon();		
+		},
+		onSignin:function(){
+			Backbone.history.navigate("/signin",true);
 		}
 	});
 	

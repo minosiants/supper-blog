@@ -78,10 +78,24 @@
 			}
 			return ;
 		}
-	});
-	var SignIn=BaseModel.extend({
-		url:'/signin',
-		validate:function(attributes){
+	});	
+		
+	var Session = Backbone.Model.extend({
+		  
+		url:app.API_HOST+'/session',
+	    initialize: function () {
+	      var that = this;	     
+	      $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+	        options.xhrFields = {
+	          withCredentials: true
+	        };
+	        
+	      });
+	    },
+	    validate:function(attributes){	    	
+	    	if(attributes.user===false){
+	    		return;
+	    	}
 			var mergedAttributes = _.extend(_.clone(this.attributes), attributes)			
 			var errors=validateEmptyFields(mergedAttributes);	
 			
@@ -90,13 +104,47 @@
 				return errors;
 			}
 			return ;
-		}
-	});
+		},
+	    login: function(creds) {	      
+	    	var that = this;
+	    	this.save(creds, {
+	         success: function () {
+	        	 that.trigger('signedin', that);
+	         }
+	      });
+	    },
+	    logout: function() {
+	      // Do a DELETE to /session and clear the clientside data
+	      var that = this;
+	      this.destroy({
+	        success: function (model, resp) {
+	          model.clear()
+	          model.id = null;	          
+	          model.set('user',false);	   
+	          console.log(model.set('user',false));
+	          console.log(model.get('user'));
+	        },
+	      error:function(d){
+	    	  console.log(d)
+	      }   
+	      });      
+	    },
+	    getSession: function(callback) {
+	      this.fetch({
+	          success: callback
+	      });
+	    },
+	    getUser:function(){
+	    	return this.get('user');
+	    }
+	  });
+	 	
+
 	
 	app.Post=Post;
 	app.profile=new Profile();
-	app.Tag=Tag
-	app.Password=Password
-	app.SignUp=SignUp
-	app.SignIn=SignIn
+	app.Tag=Tag;
+	app.Password=Password;
+	app.SignUp=SignUp;	
+	app.Session=new Session();
 })();

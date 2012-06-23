@@ -32,5 +32,4 @@ trait Secured  {this:Common=>
 		}.getOrElse(onUnauthorized(request))
 	}
 
-
 }

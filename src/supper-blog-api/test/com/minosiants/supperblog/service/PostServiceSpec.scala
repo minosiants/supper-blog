@@ -4,20 +4,27 @@ import org.specs2.mutable.Specification
 import org.specs2.mutable.SpecificationWithJUnit
 import com.minosiants.supperblog.model._
 import com.minosiants.supperblog.common.model.UserProfile
-//import play.api.test._
-//import play.api.test.Helpers._
 import org.bson.types.ObjectId
+import org.junit.runner.RunWith
+import org.specs2.runner.JUnitRunner
+
+@RunWith(classOf[JUnitRunner])
 class PostServiceSpec extends SpecificationWithJUnit with SupperBlog{
 	
 	val _postService=postService
 	
 	"create a new post " in{
 		val p=_postService.createPost(post())		   
-	  // running(FakeApplication()) {
 		   p.id must not beNull 
-        
-      //}
 
+	}
+	
+	"get posts " in{
+		val p=_postService.getPosts()		   
+				println(p);				
+				p must not beNull 
+								
+				
 	}
 //	"retrive a post" in{				
 //		val p=postService.createPost(post())

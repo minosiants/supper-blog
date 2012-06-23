@@ -11,7 +11,7 @@ import com.mongodb.casbah.Imports._
 trait PostService{
   def createPost(post:Post):Post
   def deletePost(id:String,username:String)
-  def updatePost(post:Post)
+  def updatePost(post:Post):Post
   def getPost(id:String):Option[Post]  
   def getPostsWithTags(tags:String,params:QueryParams=QueryParams()):List[Post]
   def getPosts(params:QueryParams=QueryParams()):List[Post]
@@ -33,8 +33,10 @@ trait PostServiceComponent extends Implicits{this:SupperBlog=>
      def deletePost(id:String,username:String){
        repository.delete(id,MongoDBObject("author.username" -> username))
      }
-     def updatePost(post:Post){              
-       repository.update(post.copy(tags=parseHashtags(post.content),updated=new Date()),MongoDBObject("username"->post.author.username))
+     def updatePost(post:Post)={
+       val p=post.copy(tags=parseHashtags(post.content),updated=new Date())
+       repository.update(p,MongoDBObject("username"->post.author.username))
+       p
      }
      def getPost(id:String):Option[Post]={
        repository.find(id)

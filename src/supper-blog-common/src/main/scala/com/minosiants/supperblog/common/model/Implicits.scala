@@ -20,7 +20,7 @@ trait Implicits {
 		  UserProfile(id=dbo.getAs[ObjectId]("_id").get.toString,
 				  name=dbo.getAsOrElse[String]("name",""),
 				  surname=dbo.getAsOrElse[String]("surname",""),
-				  username=dbo.getAsOrElse[String]("surname",""),
+				  username=dbo.getAsOrElse[String]("username",""),
 				  email=dbo.getAsOrElse[String]("email",""),
 				  img=dbo.getAsOrElse[String]("img",""),
 				  bio=dbo.getAsOrElse[String]("bio",""),

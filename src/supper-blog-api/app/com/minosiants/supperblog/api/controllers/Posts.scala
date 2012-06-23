@@ -27,10 +27,6 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 			)
 	)
   
-	val postsJson="""
-	  			[{"title":"ss","content":"content djdjdjd","id":"1","created":"10-10-2012","tags":["tag1","tag2"]},
-	  				{"title":"posts2","content":"content djdjdjd","id":"2","created":"10-10-2012","tags":["tag1","tag2"]}]
-	  """
 	  
 	def get(id:String) = Action {
 		postService.getPost(id).map(a=>Ok(generate(a))).getOrElse(NotFound).withHeaders(ACCESS_CONTROL:_*)			  
@@ -45,23 +41,21 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 		
 	}
 	def find = Action {
-		Ok(generate(postService.getPosts())).withHeaders(ACCESS_CONTROL:_*) 		  
+	  withCors(
+		Ok(generate(postService.getPosts()))
+	  )
 	}
 	
 	def create = withUser{user => implicit request=>
-		postForm.bind(request.body.asJson.get).fold(
-				errors=>BadRequest(generate(errorMessage(400,errors.errors))), 
-				post=>Ok(generate(postService.createPost(Post(author=user,title=post._2,content=post._3))))
-		).withHeaders(ACCESS_CONTROL:_*)  
+		withCors(
+			postForm.bind(request.body.asJson.get).fold(
+					errors=>BadRequest(generate(errorMessage(400,errors.errors))), 
+					post=>Ok(generate(postService.createPost(Post(author=user,title=post._2,content=post._3))))
+			)
+		)  
 	    
 	 }	  
-	def create1 = Action(parse.json){implicit request=>	 
-	postForm.bind(request.body).fold(
-			errors=>BadRequest(generate(errorMessage(400,errors.errors))), 
-			post=>Ok(generate(postService.createPost(Post(author=user,title=post._2,content=post._3))))
-			).withHeaders(ACCESS_CONTROL:_*).withCookies(cookie("kas"))  
-			
-	}	  
+	  
 	private def cookie(username:String)={
 	  val ut=UserToken(Some(username))
 	  Cookie("user1", ut.token ,ut.expirationDate)
@@ -84,7 +78,7 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 	}
 	
 	
-	private def user:UserProfile=UserProfile("2334","kaspar","min","kas","kas@k.com","https://twimg0-a.akamaihd.net/profile_images/1355992238/photo_1__.JPG","my bio")
+	//private def user:UserProfile=UserProfile("2334","kaspar","min","kas","kas@k.com","https://twimg0-a.akamaihd.net/profile_images/1355992238/photo_1__.JPG","my bio")
 	
 	
 }
