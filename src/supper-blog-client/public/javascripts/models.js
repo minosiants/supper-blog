@@ -108,8 +108,8 @@
 	    login: function(creds) {	      
 	    	var that = this;
 	    	this.save(creds, {
-	         success: function () {
-	        	 that.trigger('signedin', that);
+	         success: function () {	
+	        	 that.trigger('login:success', that);	        	 
 	         }
 	      });
 	    },
@@ -118,15 +118,10 @@
 	      var that = this;
 	      this.destroy({
 	        success: function (model, resp) {
-	          model.clear()
+	          model.clear();
 	          model.id = null;	          
-	          model.set('user',false);	   
-	          console.log(model.set('user',false));
-	          console.log(model.get('user'));
-	        },
-	      error:function(d){
-	    	  console.log(d)
-	      }   
+	          model.set({'user':false});	   	          
+	        }	    
 	      });      
 	    },
 	    getSession: function(callback) {

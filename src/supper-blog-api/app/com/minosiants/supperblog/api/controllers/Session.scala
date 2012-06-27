@@ -15,7 +15,10 @@ object Session extends Controller with ControllerCommon with Common with Secured
 	  withCors(
 	  	signInForm.bindFromRequest.fold(
 			  formWithErrors =>badRequest(formWithErrors.errors),
-			  user => Ok.withCookies(cookie(user.username))
+			  user => {
+			    val u=userService.getUserProfile(user.username).get
+			    Ok(generate(Map("id"->u.id,"user"->u))).withCookies(cookie(user.username));
+			  }
 	  	)
 	  )
 	}

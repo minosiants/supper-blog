@@ -23,6 +23,8 @@ $(function(){
 			this.profileView=new app.ProfileView({
 				model: app.profile
 			});
+			this.twoColumnsView=new app.TwoColumnsView();
+			
 			this.tagsView=new app.TagsView({
 				collection: app.tags,
 				posts:app.posts
@@ -31,12 +33,16 @@ $(function(){
 				collection: app.callendarPosts
 			});
 			app.posts.bind("post:selected",this.onSelectedPost,this);
-			app.posts.bind("posts:result",this.onResult,this);			    
-			Session.getSession();	
+			app.posts.bind("posts:result",this.onResult,this);
+			
+			Session.getSession();
+			
 			
 		},
 		
-		home: function() {									
+		home: function() {
+			this.insert("#twoCollumnContent",this.twoColumnsView);
+			$("#oneCollumnContent").empty();
 			$("#posts").empty().append(new app.PostsView({collection: app.posts}).render().el);
 			this.renderCommon();			
 		},
@@ -45,12 +51,14 @@ $(function(){
 			app.posts.selectPost(id);
 		},
 		onSelectedPost:function(post){
+			this.insert("#twoCollumnContent",this.twoColumnsView);
 			$("#posts").empty().append(new app.PostView({model:post}).render().el);
 			this.renderCommon();
 			Backbone.history.navigate("posts/"+post.id);
 			
 		},
 		renderCommon:function(){
+			this.insert("#main-navbar",this.mainNavbarView);
 			this.insert("#main-navbar",this.mainNavbarView);
 			this.insert("#profile",this.profileView);
 			this.insert("#calendar",this.calendarView);
@@ -70,17 +78,20 @@ $(function(){
 		onResult:function(){
 			Backbone.history.navigate(u.stripHost(app.posts.url));
 		},
-		signup:function(){						
-			$("#content").empty().append(new app.SignUpView({model:new app.SignUp()}).render().el);
+		signup:function(){
+			$("#twoCollumnContent").empty();
+			$("#oneCollumnContent").empty().append(new app.SignUpView({model:new app.SignUp()}).render().el);
 			this.renderCommon();
 		},
 		signin:function(){
-			$("#content").empty().append(new app.SignInView({model:  app.Session}).render().el);
+			$("#twoCollumnContent").empty();
+			$("#oneCollumnContent").empty().append(new app.SignInView({model:  app.Session}).render().el);
 			this.renderCommon();		
-		},
-		onSignin:function(){
-			Backbone.history.navigate("/signin",true);
 		}
+//		,
+//		onSignin:function(){
+//			Backbone.history.navigate("/signin",true);
+//		}
 	});
 	
 	

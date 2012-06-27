@@ -11,7 +11,7 @@ import com.mongodb.casbah.Imports._
 trait PostService{
   def createPost(post:Post):Post
   def deletePost(id:String,username:String)
-  def updatePost(post:Post):Post
+  def savePost(post:Post):Post
   def getPost(id:String):Option[Post]  
   def getPostsWithTags(tags:String,params:QueryParams=QueryParams()):List[Post]
   def getPosts(params:QueryParams=QueryParams()):List[Post]
@@ -26,20 +26,26 @@ trait PostServiceComponent extends Implicits{this:SupperBlog=>
     
 	 lazy val repository=dataBase.repository("posts")
     
-	 def createPost(post:Post):Post={	   
-       repository.create(post.copy(id=uniqueId,tags=parseHashtags(post.content)))  
+	 def createPost(post:Post):Post={
+	   val o=post.copy(id=uniqueId,tags=parseHashtags(post.content))
+	   println(">>>>>>>>>>>>>>>>>>>>>>>>")
+	   println(post)
+	   println(">>>>>>>>>>>>>>>>>>>>>>>>")
+       repository.create(o)  
        
      }
      def deletePost(id:String,username:String){
        repository.delete(id,MongoDBObject("author.username" -> username))
      }
-     def updatePost(post:Post)={
+     def savePost(post:Post)={
        val p=post.copy(tags=parseHashtags(post.content),updated=new Date())
-       repository.update(p,MongoDBObject("username"->post.author.username))
-       p
+       repository.find(post.id)
+       	.filter(_.author.username==post.author.username)
+       	.map{_=>repository.save(p)}
+       post
      }
-     def getPost(id:String):Option[Post]={
-       repository.find(id)
+     def getPost(id:String):Option[Post]={       
+       repository.find(id)       
      }
      def getPostsWithTags(tags:String,params:QueryParams)={       
        repository.find("tags" $in toList(tags),params)

@@ -9,12 +9,15 @@ $(function(){
 		}
 		return $.trim((name || "") +" "+ (surname || ""));  	 
 		
-	}
+	};
 	Util.prototype.wrap=function(obj){
 		return $.extend({data:obj},{});
-	}
+	};
 	Util.prototype.stripHost=function(url){
 		return url.replace(app.API_HOST,"");
-	}
+	};
+	Util.prototype.date=function(ms){
+		return moment(ms).format("MMM Do 'YY - h:mm");
+	};
 	app.util=new Util();
 });

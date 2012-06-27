@@ -27,6 +27,7 @@ object Application extends Controller with Common{
 	}
 	
 	def index()=Action{implicit request =>
+	  println(request.uri)
 	  Ok(html.main(request.uri))
 		 
 	}
@@ -35,10 +36,12 @@ object Application extends Controller with Common{
 	
 	}
 	def signInView()=Action{implicit request =>
+		
 		Ok(html.main(request.uri))
 	
 	}
-	def proxy(id:String)=Action{request=>	 		
+	def proxy(id:String)=Action{request=>
+	  	println(request.uri)
 		Ok(html.main(request.uri)) 
 	}
 	

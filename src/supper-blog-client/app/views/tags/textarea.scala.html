@@ -1,4 +1,4 @@
 @(name:String,args: (Symbol,Any)*)
 @input(name,args.toMap){(	name, value, htmlArgs)=>
-	<textarea name="@name" @toHtmlArgs(htmlArgs)>@{Html(value)}</textarea>
+	<textarea name="@name" @toHtmlArgs(htmlArgs) id=<%=new Date().getTime()%> >@{Html(value)} </textarea>
 }

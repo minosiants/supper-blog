@@ -49,8 +49,13 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 	def create = withUser{user => implicit request=>
 		withCors(
 			postForm.bind(request.body.asJson.get).fold(
-					errors=>BadRequest(generate(errorMessage(400,errors.errors))), 
-					post=>Ok(generate(postService.createPost(Post(author=user,title=post._2,content=post._3))))
+					errors=>BadRequest(generate(errorMessage(400,errors.errors))),
+					
+					post=>{
+						val p=Post(author=user,title=post._2,content=post._3)
+						println(p)
+						Ok(generate(postService.createPost(p)))
+					  }
 			)
 		)  
 	    
@@ -60,10 +65,10 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 	  val ut=UserToken(Some(username))
 	  Cookie("user1", ut.token ,ut.expirationDate)
 	}
-	def update(id:String) =withUser{user => implicit request=> 	  	  
+	def update(id:String) =withUser{user => implicit request=> 	
 	  	postForm.bind(request.body.asJson.get).fold(
 	      errors=>BadRequest(generate(errorMessage(400,errors.errors))),
-	      post=>Ok(generate(postService.updatePost(Post(id=post._1.getOrElse(""),author=user,title=post._2,content=post._3))))
+	      post=>Ok(generate(postService.savePost(Post(id=post._1.getOrElse(""),author=user,title=post._2,content=post._3))))
 	  ).withHeaders(ACCESS_CONTROL:_*)	  
 	}
 	def options2()= Action {

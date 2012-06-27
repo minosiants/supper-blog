@@ -47,7 +47,20 @@ $(function(){
         render: function() {
         	var data={data:this.model ? this.model.toJSON() : (this.collection ? this.collection.toJSON():""),
         			options:this.extraOptions||{}};
-        	$(this.el).html(this.template(data));
+        	
+        	var $el=$(this.el);
+        	var $td=this.template(data)
+        	
+        	//$("textarea",$td).wysihtml5();
+        	
+        	$el.html($td);
+        	
+        	if(Session.getUser()){
+        		$(".private",$el).show();        		
+        	}else{        		
+        		$(".private",$el).hide();
+        	} 
+        	
             return this;
         }
 	});
@@ -84,10 +97,9 @@ $(function(){
 	});
 	
 	var CreatePostModalView=BaseModalView.extend({
-		templateName:'#create-post-modal-template'
-		
-			
+		templateName:'#create-post-modal-template'							
 	});
+		
 	var EditeProfileModalView=BaseModalView.extend({
 		templateName:'#edite-profile-modal-template'
 	});
@@ -99,13 +111,11 @@ $(function(){
 		templateName:'#sign-in-modal-template',
 		save:function(e){			
         	e.preventDefault();
-        	this.clearErrors();
-        	this.model.on('signedin',function(){        		
-        		window.location="http://supper-blog.com:9000/";
-        		
-        	});
+        	this.clearErrors();        	
         	this.model.login($("form",this.el).serializeObject());
-        	
+        	this.model.on('login:success',function(){        		
+				Backbone.history.navigate("/",true);        		
+        	});
         	
 		},
 		extraOptions:{
@@ -144,7 +154,7 @@ $(function(){
             _.bindAll(this, 'render');
             this.template=_.template($(this.templateName).html());            
             var that=this;
-            Session.on('change:user',function(session){
+            Session.on('change:user',function(session){            	
             	that.render();
             });                    
         },
@@ -323,6 +333,18 @@ $(function(){
         }
 		
 	});
+	var TwoColumnsView=Backbone.View.extend({		
+		template:_.template($('#two-columns-template').html()),			
+		initialize: function() {
+			_.bindAll(this, 'render');			           
+		},
+		render: function() {        	
+			$(this.el).html(this.template());
+			return this;
+		}		
+	});
+	
+	
 	var AlertError=BaseView.extend({
 		templateName:'#alert-error-template'
 		
@@ -336,5 +358,6 @@ $(function(){
 	app.CalendarView=CalendarView;
 	app.SignUpView=SignUpView;
 	app.SignInView=SignInView;
+	app.TwoColumnsView=TwoColumnsView;
 	
 });
