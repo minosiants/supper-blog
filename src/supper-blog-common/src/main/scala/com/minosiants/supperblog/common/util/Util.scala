@@ -18,7 +18,7 @@ object Util{
   
   def parseHashtags(content:String):List[String]={
       val hashtagPattern = new Regex("""\s+#(\w+)""")
-      hashtagPattern.findAllIn(content).toList    
+      hashtagPattern.findAllIn(content).toList.map{t=>t.replace("#", "").trim}    
   }
   
   def toList(str:String,separator:String=","):List[String]={

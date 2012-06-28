@@ -7,7 +7,6 @@ import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import play.api.libs.json.Json._
 import Headers._
-import views._
 import com.codahale.jerkson.Json._
 
 import com.minosiants.supperblog.common.model.{UserProfile,User}
@@ -29,22 +28,30 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
   
 	  
 	def get(id:String) = Action {
-		postService.getPost(id).map(a=>Ok(generate(a))).getOrElse(NotFound).withHeaders(ACCESS_CONTROL:_*)			  
+	  withCors(
+		postService.getPost(id).map(a=>Ok(generate(a))).getOrElse(NotFound)
+		)
 	}
-	def config(key:String) = Action {
+	def config(key:String) = Action {	
 		val config = play.api.Play.configuration
-		Ok(config.getString(key).getOrElse("no value"))
+		Ok(config.getString(key).getOrElse("no value"))	
 		
 	}
-	def filterByTags(tags:String) = Action {	  
-		Ok(generate(postService.getPostsWithTags(tags))).withHeaders(ACCESS_CONTROL:_*)
+	
+	def filterByTags(tags:String) = Action {
+	  println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+	  withCors(
+		Ok(generate(postService.getPostsWithTags(tags)))
+		)
 		
 	}
 	def find = Action {
+	  println(">>>>>>>>>>>>>>>>ddddddddd>>>>>>>>>>>>>>>>")
 	  withCors(
 		Ok(generate(postService.getPosts()))
 	  )
 	}
+	
 	
 	def create = withUser{user => implicit request=>
 		withCors(
@@ -82,8 +89,6 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 	  Ok.withHeaders(ACCESS_CONTROL:_*)		 
 	}
 	
-	
-	//private def user:UserProfile=UserProfile("2334","kaspar","min","kas","kas@k.com","https://twimg0-a.akamaihd.net/profile_images/1355992238/photo_1__.JPG","my bio")
 	
 	
 }

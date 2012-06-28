@@ -8,8 +8,9 @@ $(function(){
 			"":                 "home",  
 			"posts/:id":        "post",  			
 			"posts?:query":     "search",
-			"signup":     "signup",
-			"signin":     "signin"
+			"posts?tags=:tags": "filterByTag",
+			"signup":     		"signup",
+			"signin":     		"signin"
 			
 		},
 		initialize:function(){
@@ -72,10 +73,15 @@ $(function(){
 			}
 			
 		},
+		filterByTag:function(tags){
+			app.posts.filterByTag(tags);
+			this.renderCommon();
+		},
 		search:function(q){
 			console.log(q);
 		},
 		onResult:function(){
+			console.log("result");
 			Backbone.history.navigate(u.stripHost(app.posts.url));
 		},
 		signup:function(){

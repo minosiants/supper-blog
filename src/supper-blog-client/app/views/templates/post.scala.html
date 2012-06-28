@@ -4,13 +4,17 @@
 		<div class="clearfix">
 			<a href="#" class="pull-left comments"> 6 Comments</a>
 			<span class="post-date pull-right"><%= app.util.date(data.created) %></span>					
-			<div class="pull-right">
+			<div class="pull-right tags-panel">
+				<i class="icon-tags"></i>
 				 <% _.each(data.tags, function(tag) { %>
          				<a href="#"><span class="tag"><%= tag %></span></a>
        			<% }); %>	
 			</div>
 		</div>
-		<div class="clearfix private"><a href="#" class="pull-right edit">Edit</a></div>
+		<div class="clearfix private">
+			<button class="btn btn-mini pull-right">Delete</button>
+			<button class="btn btn-mini edit pull-right">Edit</button>
+		</div>
 	</header>
 	<div class="post-content"><%= data.content %></div>
 </script>
@@ -20,13 +24,17 @@
 		<div class="clearfix">
 			<a href="#" class="pull-left"> 6 Comments</a>
 			<span class="post-date pull-right"><%= app.util.date(data.created) %></span>				
-			<div class="pull-right">
+			<div class="pull-right tags-panel">
+				<i class="icon-tags"></i>
 				 <% _.each(data.tags, function(tag) { %>
          				<a href="#"><span class="tag"><%= tag %></span></a>
        			<% }); %>	
 			</div>
 		</div>
-		<div class="clearfix private"><a href="#" class="pull-right edit">Edit</a></div>
+		<div class="clearfix private">
+			<button class="btn btn-mini pull-right">Delete</button>
+			<button class="btn btn-mini edit pull-right">Edit</button>
+		</div>
 	</header>
 	<div class="post-content"><%= data.content %></div>
 </script>

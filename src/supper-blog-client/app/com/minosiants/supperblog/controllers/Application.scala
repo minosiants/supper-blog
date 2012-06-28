@@ -18,7 +18,7 @@ case class SignInData(username:String, password:String)
 
 object Application extends Controller with Common{
 	
-	val Home = Redirect(routes.Application.index)
+	val Home = Redirect(routes.Application.index(""))
 	
 	private def transformFormWithErrors[T](formWithErrors:Form[T])={
 	  generate(Map(	"data"->formWithErrors.data,
@@ -26,7 +26,7 @@ object Application extends Controller with Common{
 			  )
 	}
 	
-	def index()=Action{implicit request =>
+	def index(u:String)=Action{implicit request =>
 	  println(request.uri)
 	  Ok(html.main(request.uri))
 		 
@@ -45,23 +45,6 @@ object Application extends Controller with Common{
 		Ok(html.main(request.uri)) 
 	}
 	
-//	def signIn=Action{implicit request =>
-//	  	signInForm.bindFromRequest.fold(
-//			  formWithErrors =>{Ok(html.main(request.uri,form=transformFormWithErrors(formWithErrors)))},
-//			  user => Home.withCookies(cookie(user.username))
-//	  )
-//	  
-//	}
-//	def signUp=Action{implicit request =>	  	
-//		signUpForm.bindFromRequest.fold(			  
-//			  formWithErrors =>{Ok(html.main(request.uri,form=transformFormWithErrors(formWithErrors)))},
-//			  user => Home.withCookies(cookie(userService.createUser(user).username))//.flashing("success"->"Welcome") ?			   
-//			  
-//	    )
-//	}
-//	def signOut=Action{implicit request =>
-//		Home.discardingCookies("user")
-//	}
 	
 	private def cookie(username:String)={
 	  val ut=UserToken(Some(username))

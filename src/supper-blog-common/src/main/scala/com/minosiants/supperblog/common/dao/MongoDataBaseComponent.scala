@@ -20,6 +20,7 @@ trait Repository{
   def find(query:MongoDBObject,params:QueryParams):List[DBObject]
   def find(params:QueryParams):List[DBObject]
   def findOne(query:Map[String,Any]):Option[DBObject]
+  def distinct(key:String):List[Any]
 }
 
 class MongoDBRepository(colleaction:MongoCollection) extends Repository{
@@ -62,7 +63,9 @@ class MongoDBRepository(colleaction:MongoCollection) extends Repository{
     def findOne(query:Map[String,Any]):Option[DBObject]={
     	colleaction.findOne(query)
     }
-    
+    def distinct(key:String):List[Any]={
+      colleaction.distinct(key).toList
+    }
     private def checkResult(result:WriteResult){      
     	if(!result.getLastError.ok)    	      	    		
     		throw DataBaseException(error=result.getLastError.getErrorMessage)

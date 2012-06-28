@@ -13,18 +13,32 @@ class PostServiceSpec extends SpecificationWithJUnit with SupperBlog{
 	
 	val _postService=postService
 	
-	"create a new post " in{
-		val p=_postService.createPost(post())		   
-		   p.id must not beNull 
-
-	}
-	
-	"get posts " in{
-		val p=_postService.getPosts()		   
+//	"create a new post " in{
+//		val p=_postService.createPost(post())		   
+//		   p.id must not beNull 
+//
+//	}
+//	
+//	"get posts " in{
+//		val p=_postService.getPosts()		   
+//				println(p);				
+//				p must not beNull 
+//								
+//				
+//	}
+//	"get tags " in{
+//		val p=_postService.getTags()		   
+//				println(p);				
+//				p must not beNull 
+//								
+//				
+//	}
+	"get posts by tags " in{
+		val p=_postService.getPostsWithTags("postp")		   
 				println(p);				
-				p must not beNull 
-								
-				
+		p must not beNull 
+		
+		
 	}
 //	"retrive a post" in{				
 //		val p=postService.createPost(post())

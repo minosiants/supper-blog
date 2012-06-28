@@ -23,3 +23,6 @@ body {
 input, textarea{
 	margin-left: 15px;
 }
+.tags-panel{
+	margin: 0 10px;	
+}

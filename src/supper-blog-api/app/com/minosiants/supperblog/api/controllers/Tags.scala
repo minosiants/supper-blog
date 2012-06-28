@@ -8,11 +8,13 @@ import play.api.libs.json.Json._
 import com.codahale.jerkson.Json._
 import com.minosiants.supperblog.model.Tag
 import Headers._
+import com.minosiants.supperblog.service.SupperBlog
 
-object Tags extends Controller {
+object Tags extends Controller with ControllerCommon with SupperBlog{
   
 	def get= Action {
-		Ok(generate(List(Tag("tag1"),Tag("tag2"),Tag("tag3"),Tag("tag5"),Tag("tag4"),Tag("tag6")))).withHeaders(ACCESS_CONTROL:_*)
-	  
+	  withCors(
+			  Ok(generate(postService.getTags))
+		)
 	}
 }

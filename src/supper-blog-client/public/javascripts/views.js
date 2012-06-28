@@ -49,8 +49,7 @@ $(function(){
         			options:this.extraOptions||{}};
         	
         	var $el=$(this.el);
-        	var $td=this.template(data)
-        	
+        	var $td=this.template(data)        	
         	//$("textarea",$td).wysihtml5();
         	
         	$el.html($td);
@@ -328,8 +327,8 @@ $(function(){
             return this;
         },
         selectTag:function(e){
-        	e.preventDefault();
-        	this.options.posts.filterByTag(e.target.innerText);
+        	e.preventDefault();        	
+        	this.options.posts.filterByTag(e.target.innerText.replace("#",""));
         }
 		
 	});

@@ -15,6 +15,7 @@ trait PostService{
   def getPost(id:String):Option[Post]  
   def getPostsWithTags(tags:String,params:QueryParams=QueryParams()):List[Post]
   def getPosts(params:QueryParams=QueryParams()):List[Post]
+  def getTags():List[Tag]
 }
 
 
@@ -26,12 +27,8 @@ trait PostServiceComponent extends Implicits{this:SupperBlog=>
     
 	 lazy val repository=dataBase.repository("posts")
     
-	 def createPost(post:Post):Post={
-	   val o=post.copy(id=uniqueId,tags=parseHashtags(post.content))
-	   println(">>>>>>>>>>>>>>>>>>>>>>>>")
-	   println(post)
-	   println(">>>>>>>>>>>>>>>>>>>>>>>>")
-       repository.create(o)  
+	 def createPost(post:Post):Post={	   
+       repository.create(post.copy(id=uniqueId,tags=parseHashtags(post.content)))  
        
      }
      def deletePost(id:String,username:String){
@@ -53,7 +50,10 @@ trait PostServiceComponent extends Implicits{this:SupperBlog=>
      def getPosts(params:QueryParams=QueryParams())={
        repository.find(params)
      }
-     
+     def getTags()={
+        repository.distinct("tags").map{t=>Tag(t.asInstanceOf[String])}
+        
+     }
   } 
 }
 
