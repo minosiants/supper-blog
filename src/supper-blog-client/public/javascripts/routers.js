@@ -7,8 +7,8 @@ $(function(){
 		routes: {
 			"":                 "home",  
 			"posts/:id":        "post",  			
-			"posts?:query":     "search",
-			"posts?tags=:tags": "filterByTag",
+			"posts?q=:query":     "search",
+			"posts/tags/:tags": "filterByTag",
 			"signup":     		"signup",
 			"signin":     		"signin"
 			
@@ -73,15 +73,17 @@ $(function(){
 			}
 			
 		},
-		filterByTag:function(tags){
-			app.posts.filterByTag(tags);
-			this.renderCommon();
+		filterByTag:function(tags){			
+			app.posts.filterByTag(tags);			
 		},
 		search:function(q){
 			console.log(q);
 		},
-		onResult:function(){
-			console.log("result");
+		onResult:function(){			
+			this.insert("#twoCollumnContent",this.twoColumnsView);			
+			$("#oneCollumnContent").empty();
+			$("#posts").empty().append(new app.PostsView({collection: app.posts}).render().el);
+			this.renderCommon();
 			Backbone.history.navigate(u.stripHost(app.posts.url));
 		},
 		signup:function(){

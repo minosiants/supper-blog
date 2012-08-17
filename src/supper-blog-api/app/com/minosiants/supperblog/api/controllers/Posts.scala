@@ -8,14 +8,22 @@ import play.api.data.validation.Constraints._
 import play.api.libs.json.Json._
 import Headers._
 import com.codahale.jerkson.Json._
-
 import com.minosiants.supperblog.common.model.{UserProfile,User}
 import com.minosiants.supperblog.model.{Post}
 import com.minosiants.supperblog.service.SupperBlog
-
 import play.api.Play.current
 import play.api.Configuration
 import com.minosiants.supperblog.common.UserToken
+import play.api.libs.iteratee.Iteratee
+import play.api.libs.iteratee.Enumerator
+import com.minosiants.supperblog.middleware.Middleware.{subscriber,system}
+import akka.actor.Props
+import akka.actor.Actor
+import com.minosiants.supperblog.middleware.message.Message
+import com.minosiants.supperblog.middleware.Channel._
+import com.minosiants.supperblog.middleware.Subscribe
+import play.api.libs.json.JsValue
+import com.minosiants.supperblog.middleware.Unsubscribe
 
 object Posts extends Controller with ControllerCommon with Secured with SupperBlog{
 	
@@ -38,15 +46,13 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 		
 	}
 	
-	def filterByTags(tags:String) = Action {
-	  println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-	  withCors(
+	def filterByTags(tags:String) = Action { implicit request=>	  	  
+	  withCors(	      
 		Ok(generate(postService.getPostsWithTags(tags)))
 		)
 		
 	}
-	def find = Action {
-	  println(">>>>>>>>>>>>>>>>ddddddddd>>>>>>>>>>>>>>>>")
+	def find = Action {implicit request=>	  
 	  withCors(
 		Ok(generate(postService.getPosts()))
 	  )
@@ -78,8 +84,10 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 	      post=>Ok(generate(postService.savePost(Post(id=post._1.getOrElse(""),author=user,title=post._2,content=post._3))))
 	  ).withHeaders(ACCESS_CONTROL:_*)	  
 	}
-	def options2()= Action {
-		Ok("").withHeaders(ACCESS_CONTROL:_*) 		  
+	def options2(id:String="")= Action {
+	  withCors(
+		Ok("")
+		)
 	}
 	def options(id:String="")= Action {
 		Ok("").withHeaders(ACCESS_CONTROL:_*) 		  
@@ -89,6 +97,25 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 	  Ok.withHeaders(ACCESS_CONTROL:_*)		 
 	}
 	
+	
+	
+	def postCreated= WebSocket.using[String] {implicit request => 
+	  
+	  
+	  val out = Enumerator.imperative[String]( onStart = () => "")
+	  val s = system.actorOf(Props(new Actor {
+		  def receive = {
+		  	case m: Message => out.push(generate(m.body))
+		  }
+	  }))
+	  val in = Iteratee.consume[String]().mapDone{_=>
+	    subscriber ! Unsubscribe(POST_CREATED,s)
+	    println ("unsubscribe")
+	  }
+	subscriber ! Subscribe(POST_CREATED,s)
+	  
+	  (in, out)
+	}
 	
 	
 }

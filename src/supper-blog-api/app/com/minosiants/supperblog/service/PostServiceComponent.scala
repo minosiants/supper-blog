@@ -7,7 +7,8 @@ import com.minosiants.supperblog.common.model.QueryParams
 import com.minosiants.supperblog.exception._
 import com.minosiants.supperblog.common.util.Util._
 import com.mongodb.casbah.Imports._
-
+import com.minosiants.supperblog.middleware.Middleware.{publisher}
+import com.minosiants.supperblog.middleware.message._
 trait PostService{
   def createPost(post:Post):Post
   def deletePost(id:String,username:String)
@@ -28,17 +29,22 @@ trait PostServiceComponent extends Implicits{this:SupperBlog=>
 	 lazy val repository=dataBase.repository("posts")
     
 	 def createPost(post:Post):Post={	   
+       val p=create(post)
+       publisher ! PostCreated(p) 
+       p
+     }
+	 private def create(post:Post):Post={
        repository.create(post.copy(id=uniqueId,tags=parseHashtags(post.content)))  
-       
      }
      def deletePost(id:String,username:String){
        repository.delete(id,MongoDBObject("author.username" -> username))
+       publisher ! PostDeleted(id)
      }
      def savePost(post:Post)={
        val p=post.copy(tags=parseHashtags(post.content),updated=new Date())
        repository.find(post.id)
        	.filter(_.author.username==post.author.username)
-       	.map{_=>repository.save(p)}
+       	.map{_=>repository.save(p); publisher ! PostUpdated(p)}
        post
      }
      def getPost(id:String):Option[Post]={       

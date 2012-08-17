@@ -113,7 +113,7 @@ $(function(){
         	this.clearErrors();        	
         	this.model.login($("form",this.el).serializeObject());
         	this.model.on('login:success',function(){        		
-				Backbone.history.navigate("/",true);        		
+        		Backbone.history.navigate("/",true);        		
         	});
         	
 		},

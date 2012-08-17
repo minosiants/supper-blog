@@ -13,9 +13,12 @@
 			return post;
 		},
 		filterByTag:function(tag){
-			this.url=app.API_HOST+"/posts?tags="+tag;
-			this.fetch();
-			this.trigger("posts:result");
+			this.url=app.API_HOST+"/posts/tags/"+tag;
+			var that=this;
+			this.fetch({success:function(){
+				that.trigger("posts:result");
+			}});
+			
 		}		
   			
 	});

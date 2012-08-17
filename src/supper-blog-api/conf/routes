@@ -5,13 +5,15 @@
 # Posts
 GET			/posts/:id					com.minosiants.supperblog.api.controllers.Posts.get(id:String)
 GET			/config/:key				com.minosiants.supperblog.api.controllers.Posts.config(key:String)
-GET			/posts						com.minosiants.supperblog.api.controllers.Posts.find
-GET			/posts?tags=:tags			com.minosiants.supperblog.api.controllers.Posts.filterByTags(tags:String)
+GET			/posts						com.minosiants.supperblog.api.controllers.Posts.find()
+GET			/posts/tags/:tags			com.minosiants.supperblog.api.controllers.Posts.filterByTags(tags)
 POST		/posts						com.minosiants.supperblog.api.controllers.Posts.create
 PUT			/posts/:id					com.minosiants.supperblog.api.controllers.Posts.update(id:String)
 DELETE		/posts/:id					com.minosiants.supperblog.api.controllers.Posts.delete(id:String)
-OPTIONS		/<(posts|session)/>		com.minosiants.supperblog.api.controllers.Posts.options2
-#OPTIONS		/posts/:id					com.minosiants.supperblog.api.controllers.Posts.options(id:String)
+OPTIONS		/$id<(posts|session)/?>		com.minosiants.supperblog.api.controllers.Posts.options2(id)
+#OPTIONS	/posts/:id					com.minosiants.supperblog.api.controllers.Posts.options(id:String)
+
+GET			/ws/posts/created			com.minosiants.supperblog.api.controllers.Posts.postCreated
 
 # Settings
 GET			/settings/profile			com.minosiants.supperblog.api.controllers.Settings.getProfile
