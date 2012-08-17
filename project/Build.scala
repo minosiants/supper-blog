@@ -21,7 +21,7 @@ object SupperBlogBuild extends Build {
         mainLang = SCALA
         ).settings(
       // Add your own project settings here      
-        ).dependsOn(supperBlogCommonProject)     
+        ).dependsOn(supperBlogCommonProject, supperBlogMiddlewareProject)     
 
     lazy val supperBlogClientPlayProject = PlayProject(
         "supper-blog-client", 
@@ -49,7 +49,18 @@ object SupperBlogBuild extends Build {
         )
       // add other settings here
     )
-    
+   )
+    lazy val supperBlogMiddlewareProject = Project(
+    id = "supper-blog-middleware",
+    base = file("src/supper-blog-middleware"),
+    settings = Project.defaultSettings ++ Seq(
+      name := "supper-blog-middleware",
+      organization := "com.minosiants",
+      version := "0.1",
+      resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases",
+      libraryDependencies += "com.typesafe.akka" % "akka-actor" % "2.0.1"
+    )
   )
+    
 
 }
