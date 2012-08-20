@@ -1,1 +1,10 @@
-ffff
+# Supper Blog
+
+## Purpose 
+Simple sandbox to explore the folowing technologies and approaches
+* Scala
+* Play2
+* Akka
+* Backbone.js  
+* Websockets
+* CORS
