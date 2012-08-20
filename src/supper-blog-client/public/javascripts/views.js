@@ -255,10 +255,17 @@ $(function(){
             return this;
         },
         renderPost:function(post){
+        
         	$(this.el).append($('<li></li>').append(new PostPreView({model:post,posts:this.collection}).render().el));	
         },
-        renderOnChange:function(){
-        	console.log("renderOnChange");
+        renderOnChange:function(post){
+        	var postHtml=$('<li></li>').append(new PostPreView({model:post,posts:this.collection}).render().el);
+            $(postHtml)
+		        .hide()
+		        .css('opacity',0.0)
+		        .prependTo(this.el)
+		        .slideDown('slow')
+		        .animate({opacity: 1.0});        	
         }
               
 	});

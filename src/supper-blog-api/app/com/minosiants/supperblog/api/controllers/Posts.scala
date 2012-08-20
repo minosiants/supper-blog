@@ -99,7 +99,7 @@ object Posts extends Controller with ControllerCommon with Secured with SupperBl
 	
 	
 	
-	def postCreated= WebSocket.using[String] {implicit request => 
+	def postWebSocket= WebSocket.using[String] {implicit request => 
 	  
 	  
 	  val out = Enumerator.imperative[String]( onStart = () => "")
