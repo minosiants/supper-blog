@@ -1,0 +1,17 @@
+@import tags._
+
+@modal("Update Profile"){ 
+	<form class=" clearfix" method="post">
+		<fieldset class="pull-left">
+			<div><img  style="width: 150px; height: 150px; border: 1px gray solid;"></img></div>							
+			@inputFile(name="")
+		</fieldset>			
+ 			<fieldset class="pull-right">
+			@inputText(name="First name",('placeholder -> "Type first name"))
+			@inputText(name="Surname",('placeholder -> "Type surname"))	  			  		
+			@inputText(name="Twitter",('placeholder -> "Type your twitter"))
+			@inputText(name="Skype",('placeholder -> "Type your skype name"))	  			  		
+			@textarea(name="Bio",('placeholder -> "Type about you"))	  			  		
+ 			</fieldset>
+	</form>		
+}		

@@ -30,7 +30,7 @@ object SupperBlogBuild extends Build {
         path=file("src/supper-blog-client"), 
         mainLang = SCALA
         ).settings(
-      // Add your own project settings here      
+     	
         ).dependsOn(supperBlogCommonProject)
      
 

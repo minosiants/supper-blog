@@ -1,0 +1,12 @@
+@import tags._
+	
+@modal("Sign Up"){ 
+	<form class=" clearfix" method="post">			
+ 			<fieldset class="span4">
+			@inputText(name="Username" ,('_value->"<%= data.username %>"),('placeholder->"Username"))	  			  		
+			@inputText(name="Email",  ('_value->"<%=data.email%>"), ('placeholder->"Email"))
+			@inputPassword(name="password",('placeholder->"Password"), '_label->"Password")	  			  		
+			@inputPassword(name="confirm",('placeholder->"Reenter Password"), '_label->"Confirm Password")	  			  		
+ 			</fieldset>
+	</form>		
+}		

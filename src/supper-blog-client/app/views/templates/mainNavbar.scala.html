@@ -1,0 +1,50 @@
+@import tags._	   	
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="brand" href="/">Supper Blog</a>
+			<ul class="nav pull-right" style="display: none;" id="userMenu">
+				<li>
+					<form class="navbar-search pull-right">
+						<input type="text" class="search-query" placeholder="Search">
+					</form>
+				</li>
+				<li class="divider-vertical"></li>					
+				<li>
+					<div class="btn-group">
+							<a class="btn btn-inverse" href="#"><i class="icon-user icon-white"></i></a> 
+							<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a class="edit-profile"><i class="i"></i> Edit Profile</a></li>
+								<li><a class="change-password"><i class="i"></i> Change Password</a></li>
+								<li><a class=" sign-out"><i class="i"></i> Sign Out</a></li>
+							</ul>
+					</div>
+				</li>
+				<li class="divider-vertical"></li>
+				<li>
+					<button type="submit" class="btn btn-primary new-post">
+						<i class="icon-pencil icon-white"></i>
+					</button>
+				</li>
+			</ul>
+			@** Not signed in **@
+			<ul class="nav pull-right" id="signinMenu">
+				<li>
+					<form class="navbar-search pull-right">
+						<input type="text" class="search-query" placeholder="Search">
+					</form>
+				</li>
+				<li class="divider-vertical"></li>
+				<li>
+					<a class="sign-in" href="/signin"><i class="i"></i> Sign in</a>
+				</li>
+				<li>
+					<a class="sign-up" href="/signup"><i class="i"></i> Sign up</a>
+				</li>
+			</ul>
+			@** Not signed in end **@
+		</div>
+	</div>
+</div>
+

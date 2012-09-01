@@ -5,6 +5,19 @@ Simple sandbox to explore the folowing technologies and approaches
 * Scala
 * Play2
 * Akka
+* MongoDB
+* Twitter bootstrap
 * Backbone.js  
 * Websockets
 * CORS
+TODO
+* Combine all assets files
+* apply sidemap for js
+
+Full separation of UI and serverside logic
+
+
+
+
+
+

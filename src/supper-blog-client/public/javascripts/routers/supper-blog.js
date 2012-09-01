@@ -1,9 +1,24 @@
-$(function(){
-	app=window.app||{};
-	var u=app.util;
-	var Session=app.Session;
+define(["jquery","underscore","backbone",
+        "models/post",
+        "views/main-navbar-view",
+        "views/profile-view",
+        "views/two-columns-view", 
+        "views/tags-view",
+        "views/calendar-view",
+        "views/posts-view",
+        "views/post-view",
+        "views/sign-up-view",
+        "views/sign-in-view",
+        "collections/posts",
+        "collections/tags",
+        "collections/calendar-posts",
+        "models/session",
+        "models/profile"],
+		function($,_,Backbone,Post,
+				MainNavbarView,ProfileView,TwoColumnsView,TagsView,CalendarView,PostsView,PostView,
+				SignUpView,SignInView,posts,tags,callendarPosts,Session,profile){
 	var SupperBlogRouter=Backbone.Router.extend({
-		
+
 		routes: {
 			"":                 "home",  
 			"posts/:id":        "post",  			
@@ -11,52 +26,52 @@ $(function(){
 			"posts/tags/:tags": "filterByTag",
 			"signup":     		"signup",
 			"signin":     		"signin"
-			
+
 		},
 		initialize:function(){
 			 _.bindAll(this, 'signup', 'signin');
-			this.mainNavbarView= new app.MainNavbarView({
-				
+			this.mainNavbarView= new MainNavbarView({
+
 			});
-			
+
 			this.mainNavbarView.bind("signin",this.onSignin,this);
-			
-			this.profileView=new app.ProfileView({
-				model: app.profile
+
+			this.profileView=new ProfileView({
+				model: profile
 			});
-			this.twoColumnsView=new app.TwoColumnsView();
-			
-			this.tagsView=new app.TagsView({
-				collection: app.tags,
-				posts:app.posts
+			this.twoColumnsView=new TwoColumnsView();
+
+			this.tagsView=new TagsView({
+				collection: tags,
+				posts:posts
 			});
-			this.calendarView=new app.CalendarView({
-				collection: app.callendarPosts
+			this.calendarView=new CalendarView({
+				collection: callendarPosts
 			});
-			app.posts.bind("post:selected",this.onSelectedPost,this);
-			app.posts.bind("posts:result",this.onResult,this);
-			
+			posts.bind("post:selected",this.onSelectedPost,this);
+			posts.bind("posts:result",this.onResult,this);
+
 			Session.getSession();
-			
-			
+
+
 		},
-		
+
 		home: function() {
 			this.insert("#twoCollumnContent",this.twoColumnsView);
 			$("#oneCollumnContent").empty();
-			$("#posts").empty().append(new app.PostsView({collection: app.posts}).render().el);
+			$("#posts").empty().append(new PostsView({collection: posts}).render().el);
 			this.renderCommon();			
 		},
 
 		post: function(id) {			
-			app.posts.selectPost(id);
+			posts.selectPost(id);
 		},
 		onSelectedPost:function(post){
 			this.insert("#twoCollumnContent",this.twoColumnsView);
-			$("#posts").empty().append(new app.PostView({model:post}).render().el);
+			$("#posts").empty().append(new PostView({model:post}).render().el);
 			this.renderCommon();
 			Backbone.history.navigate("posts/"+post.id);
-			
+
 		},
 		renderCommon:function(){
 			this.insert("#main-navbar",this.mainNavbarView);
@@ -65,16 +80,16 @@ $(function(){
 			this.insert("#calendar",this.calendarView);
 			this.insert("#tags",this.tagsView);
 		},
-		
+
 		insert:function(id,view){
 			var $el=$(id);					
 			if($el.is(":empty")){
 				$el.append(view.render().el);
 			}
-			
+
 		},
 		filterByTag:function(tags){			
-			app.posts.filterByTag(tags);			
+			posts.filterByTag(tags);			
 		},
 		search:function(q){
 			console.log(q);
@@ -82,18 +97,18 @@ $(function(){
 		onResult:function(){			
 			this.insert("#twoCollumnContent",this.twoColumnsView);			
 			$("#oneCollumnContent").empty();
-			$("#posts").empty().append(new app.PostsView({collection: app.posts}).render().el);
+			$("#posts").empty().append(new PostsView({collection: posts}).render().el);
 			this.renderCommon();
-			Backbone.history.navigate(u.stripHost(app.posts.url));
+			Backbone.history.navigate(u.stripHost(posts.url));
 		},
 		signup:function(){
 			$("#twoCollumnContent").empty();
-			$("#oneCollumnContent").empty().append(new app.SignUpView({model:new app.SignUp()}).render().el);
+			$("#oneCollumnContent").empty().append(new SignUpView({model:new SignUp()}).render().el);
 			this.renderCommon();
 		},
 		signin:function(){
 			$("#twoCollumnContent").empty();
-			$("#oneCollumnContent").empty().append(new app.SignInView({model:  app.Session}).render().el);
+			$("#oneCollumnContent").empty().append(new SignInView({model:Session}).render().el);
 			this.renderCommon();		
 		}
 //		,
@@ -101,12 +116,11 @@ $(function(){
 //			Backbone.history.navigate("/signin",true);
 //		}
 	});
-	
-	
-	app.supperBlogRouter= new SupperBlogRouter();
+
+
+	var sbr=new SupperBlogRouter();
 	 Backbone.history.start({
         pushState: true
      });
-	/* Router.navigate();*/
-	
+	 return sbr;
 });

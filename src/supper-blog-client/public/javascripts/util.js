@@ -1,5 +1,5 @@
-$(function(){
-	app=window.app||{}
+define(["jquery","moment","app"],function($,moment,app){
+	
 	var Util=function(){
 	
 	}
@@ -10,14 +10,24 @@ $(function(){
 		return $.trim((name || "") +" "+ (surname || ""));  	 
 		
 	};
-	Util.prototype.wrap=function(obj){
-		return $.extend({data:obj},{});
-	};
+	
 	Util.prototype.stripHost=function(url){
 		return url.replace(app.API_HOST,"");
 	};
 	Util.prototype.date=function(ms){
 		return moment(ms).format("MMM Do 'YY - h:mm");
 	};
-	app.util=new Util();
+	Util.prototype.validateEmptyFields=function(obj){
+		var errors=[];
+		$.each( obj, function(field, value){		    
+		    if(_.isEmpty(value)){
+		    	errors.push({field:field,message:"Should not be empty"})
+		    }
+		});
+		return errors;
+	}
+	Util.prototype.wrap=function(obj){		
+		return $.extend({data:$.extend(obj,{util:new Util()})},{});
+	};
+	return new Util();
 });

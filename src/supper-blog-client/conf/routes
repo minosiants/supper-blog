@@ -3,7 +3,12 @@
 # ~~~~
 
 # Home page
-GET     	/$url<(?!assets).*>			 com.minosiants.supperblog.controllers.Application.index(url)
+GET     	/$url<(?!assets|templates).*>			 com.minosiants.supperblog.controllers.Application.index(url)
+GET     	/templates/*view             com.minosiants.supperblog.controllers.Application.templates(view)
+#GET     	/url/:url			 com.minosiants.supperblog.controllers.Application.index(url)
+
+#GET /requirejs		com.minosiants.supperblog.controllers.Application.requirejs
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+

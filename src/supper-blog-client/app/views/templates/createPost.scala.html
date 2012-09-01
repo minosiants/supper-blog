@@ -1,0 +1,10 @@
+@import tags._
+<% var action= data.id ? "Save post":"Create post";%>
+@modal("<%=action%>"){ 
+	<form class=" clearfix">			
+ 			<fieldset class="span4">
+			@inputText(name="Title",('_value->"<%= data.title %>"),('placeholder->"Type post title"))	  			  		
+			@textarea(name="Content",('_value->"<%= data.content %>"), ('placeholder->"Type post content"))	  			
+ 			</fieldset>
+	</form>		
+}		
